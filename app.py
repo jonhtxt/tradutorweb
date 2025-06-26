@@ -5,7 +5,7 @@ import deepl
 import os
 
 # Pega a chave da API DeepL do ambiente (Render.com ou local)
-auth_key = os.environ.get("60bec253-fcec-437a-a2d8-cc1d3d8d196a:fx")
+auth_key = os.environ.get("DEEPL_AUTH_KEY")
 translator = deepl.Translator(auth_key)
 
 app = Flask(__name__)
