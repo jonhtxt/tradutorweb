@@ -2,3 +2,5 @@ flask
 deepl
 requests
 beautifulsoup4
+python-docx
+PyMuPDF
