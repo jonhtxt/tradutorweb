@@ -2,6 +2,7 @@ from flask import Flask, request, render_template_string
 import requests
 from bs4 import BeautifulSoup
 import deepl
+import os
 
 # Sua chave da API DeepL
 auth_key = "60bec253-fcec-437a-a2d8-cc1d3d8d196a:fx"
@@ -44,7 +45,8 @@ def index():
             resposta = requests.get(url)
             soup = BeautifulSoup(resposta.text, "html.parser")
             paragrafos = soup.find_all("p")
-            texto = " ".join(p.get_text().strip() for p in paragrafos if p.get_text().strip())
+            tags = soup.find_all(['p', 'div', 'span', 'h1', 'h2', 'li'])
+            texto = " ".join(tag.get_text().strip() for tag in tags if tag.get_text().strip())
             if texto:
                 resultado = translator.translate_text(texto, target_lang="EN-US")
                 traducao = resultado.text
@@ -57,3 +59,29 @@ def index():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
+
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from bs4 import BeautifulSoup
+
+def pegar_texto_com_selenium(url):
+    options = Options()
+    options.add_argument("--headless")  # roda o navegador invisível
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
+    # Ajuste o caminho do chromedriver abaixo:
+    driver = webdriver.Chrome(executable_path="C:/webdrivers/chromedriver.exe", options=options)
+    driver.get(url)
+    
+    # Espera um pouco para a página carregar
+    driver.implicitly_wait(5)
+    
+    html = driver.page_source
+    driver.quit()
+    
+    soup = BeautifulSoup(html, "html.parser")
+    # Pega textos em várias tags
+    tags = soup.find_all(['p', 'div', 'span', 'h1', 'h2', 'li'])
+    texto = " ".join(tag.get_text().strip() for tag in tags if tag.get_text().strip())
+    return texto
+    
