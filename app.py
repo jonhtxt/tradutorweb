@@ -47,8 +47,37 @@ HTML = """
 # Função para dividir texto em blocos menores
 def dividir_em_blocos(texto, tamanho=4500):
     return [texto[i:i+tamanho] for i in range(0, len(texto), tamanho)]
+import fitz  # PyMuPDF
+import docx
+import tempfile
 
 @app.route("/", methods=["GET", "POST"])
+
+def extrair_texto_pdf(caminho):
+    texto = ""
+    with fitz.open(caminho) as pdf:
+        for pagina in pdf:
+            texto += pagina.get_text()
+    return texto
+
+def extrair_texto_docx(caminho):
+    doc = docx.Document(caminho)
+    texto = " ".join(p.text for p in doc.paragraphs if p.text.strip())
+    return texto
+def extrair_texto_pdf(caminho):
+    """Extrai texto de arquivos PDF usando PyMuPDF (fitz)"""
+    texto = ""
+    with fitz.open(caminho) as pdf:
+        for pagina in pdf:
+            texto += pagina.get_text()
+    return texto
+
+def extrair_texto_docx(caminho):
+    """Extrai texto de arquivos DOCX usando python-docx"""
+    doc = docx.Document(caminho)
+    texto = " ".join(p.text for p in doc.paragraphs if p.text.strip())
+    return texto
+
 def index():
     traducao = ""
     if request.method == "POST":
