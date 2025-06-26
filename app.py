@@ -53,13 +53,6 @@ import tempfile
 
 @app.route("/", methods=["GET", "POST"])
 
-def extrair_texto_pdf(caminho):
-    texto = ""
-    with fitz.open(caminho) as pdf:
-        for pagina in pdf:
-            texto += pagina.get_text()
-    return texto
-
 def extrair_texto_docx(caminho):
     doc = docx.Document(caminho)
     texto = " ".join(p.text for p in doc.paragraphs if p.text.strip())
@@ -70,12 +63,6 @@ def extrair_texto_pdf(caminho):
     with fitz.open(caminho) as pdf:
         for pagina in pdf:
             texto += pagina.get_text()
-    return texto
-
-def extrair_texto_docx(caminho):
-    """Extrai texto de arquivos DOCX usando python-docx"""
-    doc = docx.Document(caminho)
-    texto = " ".join(p.text for p in doc.paragraphs if p.text.strip())
     return texto
 
 def index():
@@ -130,19 +117,3 @@ def index():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
-
-import fitz  # PyMuPDF
-import docx
-import tempfile
-
-def extrair_texto_pdf(caminho):
-    texto = ""
-    with fitz.open(caminho) as pdf:
-        for pagina in pdf:
-            texto += pagina.get_text()
-    return texto
-
-def extrair_texto_docx(caminho):
-    doc = docx.Document(caminho)
-    texto = " ".join(p.text for p in doc.paragraphs if p.text.strip())
-    return texto
