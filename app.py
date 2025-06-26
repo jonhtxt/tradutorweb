@@ -1,8 +1,12 @@
-from flask import Flask, request, render_template_string
+import os
 import requests
+from flask import Flask, request, render_template_string
 from bs4 import BeautifulSoup
 import deepl
-import os
+import docx
+import fitz  # PyMuPDF
+import tempfile  # ✅ ESSA LINHA É A QUE FALTAVA
+
 
 # Pega a chave da API DeepL do ambiente (Render.com ou local)
 auth_key = os.environ.get("DEEPL_AUTH_KEY")
